@@ -261,6 +261,7 @@ tegraflash_create_flash_config:tegra194() {
         -e"s,TBCFILE,${CBOOTFILENAME}," \
         -e"s,CAMERAFW,camera-rtcpu-rce.img," \
         -e"s,DRAMECCTYPE,dram_ecc," -e"s,DRAMECCFILE,dram-ecc-t194.bin," -e"s,DRAMECCNAME,dram-ecc-fw," \
+        -e"s,SCEFILE,camera-rtcpu-sce.img," -e"s,SCENAME,sce-fw," -e"s,SCESIGN,true," \
         -e"s,SPEFILE,spe_t194.bin," \
         -e"s,WB0BOOT,warmboot_t194_prod.bin," \
         -e"s,TOSFILE,${TOSIMGFILENAME}," \
@@ -268,6 +269,7 @@ tegraflash_create_flash_config:tegra194() {
         $cbotag \
         -e"s,RECNAME,recovery," -e"s,RECSIZE,66060288," -e"s,RECDTB-NAME,recovery-dtb," -e"s,BOOTCTRLNAME,kernel-bootctrl," \
         -e"/RECFILE/d" -e"/RECDTB-FILE/d" -e"/BOOTCTRL-FILE/d" \
+        -e"s,BADPAGETYPE,data," -e"/BADPAGEFILE/d" \
         -e"s,APPSIZE,${ROOTFSPART_SIZE}," \
         -e"s,RECROOTFSSIZE,${RECROOTFSSIZE}," \
         -e"s,SMDFILE,${SMDFILE}," \
