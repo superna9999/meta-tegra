@@ -32,6 +32,7 @@ BOOTBINS:tegra194 = "\
     adsp-fw.bin \
     bpmp_t194.bin \
     camera-rtcpu-rce.img \
+    camera-rtcpu-sce.img \
     dram-ecc-t194.bin \
     eks.img \
     mb1_t194_prod.bin \
@@ -45,6 +46,7 @@ BOOTBINS:tegra194 = "\
     nvtboot_recovery_cpu_t194.bin \
     preboot_d15_prod_cr.bin \
     spe_t194.bin \
+    sce_t194.bin \
     warmboot_t194_prod.bin \
 "
 

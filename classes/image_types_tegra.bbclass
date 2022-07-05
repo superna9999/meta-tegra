@@ -260,6 +260,7 @@ tegraflash_create_flash_config:tegra194() {
         -e"s,BPFFILE,bpmp_t194.bin," \
         -e"s,TBCFILE,${CBOOTFILENAME}," \
         -e"s,CAMERAFW,camera-rtcpu-rce.img," \
+        -e"s,SCEFILE,sce_t194.bin," -e"s,SCENAME,sce-fw," -e"s,SCESIGN,true," \
         -e"s,DRAMECCTYPE,dram_ecc," -e"s,DRAMECCFILE,dram-ecc-t194.bin," -e"s,DRAMECCNAME,dram-ecc-fw," \
         -e"s,SPEFILE,spe_t194.bin," \
         -e"s,WB0BOOT,warmboot_t194_prod.bin," \
@@ -268,6 +269,7 @@ tegraflash_create_flash_config:tegra194() {
         $cbotag \
         -e"s,RECNAME,recovery," -e"s,RECSIZE,66060288," -e"s,RECDTB-NAME,recovery-dtb," -e"s,BOOTCTRLNAME,kernel-bootctrl," \
         -e"/RECFILE/d" -e"/RECDTB-FILE/d" -e"/BOOTCTRL-FILE/d" \
+        -e"s,BADPAGETYPE,black_list_info," -e"s,BADPAGEFILE,badpage.bin," \
         -e"s,APPSIZE,${ROOTFSPART_SIZE}," \
         -e"s,RECROOTFSSIZE,${RECROOTFSSIZE}," \
         -e"s,SMDFILE,${SMDFILE}," \
@@ -328,6 +330,7 @@ BOOTFILES:tegra194 = "\
     preboot_d15_prod_cr.bin \
     slot_metadata.bin \
     spe_t194.bin \
+    sce_t194.bin \
     warmboot_t194_prod.bin \
     xusb_sil_rel_fw \
 "
@@ -495,6 +498,7 @@ create_tegraflash_pkg:tegra194() {
     mkdir -p "${WORKDIR}/tegraflash"
     oldwd=`pwd`
     cd "${WORKDIR}/tegraflash"
+    dd if=/dev/zero of=badpage.bin bs=4096 count=1
     cp "${STAGING_DATADIR}/tegraflash/bsp_version" .
     cp "${STAGING_DATADIR}/tegraflash/${MACHINE}.cfg" .
     cp "${STAGING_DATADIR}/tegraflash/${MACHINE}-override.cfg" .
@@ -643,9 +647,7 @@ oe_make_bup_payload() {
     mkdir ${WORKDIR}/bup-payload
     oldwd="$PWD"
     cd ${WORKDIR}/bup-payload
-    if [ "${SOC_FAMILY}" = "tegra186" ]; then
-        dd if=/dev/zero of=badpage.bin bs=4096 count=1
-    fi
+    dd if=/dev/zero of=badpage.bin bs=4096 count=1
     # BUP generator really wants to use 'boot.img' for the LNX
     # partition contents
     cp $1 ./boot.img
