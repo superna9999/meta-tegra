@@ -201,7 +201,15 @@ case "$boardid" in
 		elif [ "$board_sku" = "0004" ] || [ $board_version -gt 300 -a `expr "$board_revision" \> "D.0"` -eq 1 ]; then
 		    PMICREV="a04-E-0"
 		    BPFDTBREV="a04"
+		elif [ "$board_sku" = "0008" ]; then
+		    PMICREV="b01"
+		    BPFDTBREV="b01-jaxi"
 		fi
+		;;
+	    6[0-9][0-9])
+		TOREV="a02"
+		PMICREV="b01"
+		BPFDTBREV="b01-jaxi"
 		;;
 	    *)
 		echo "ERR: unrecognized board version $board_version" >&2
@@ -234,6 +242,9 @@ ramcodeargs=
 if [ "$board_id" = "2888" -a "$board_sku" = "0004" ]; then
     # 32GB AGX Xavier
     ramcodeargs="--ramcode 2"
+elif [ "$board_id" = "2888" -a "$board_sku" = "0008" ]; then
+    # Industrial AGX Xavier
+    ramcodeargs="--ramcode 1"
 elif [ "$board_id" = "3668" -a "$board_version" = "301" ]; then
     # Xavier NX A03
     ramcodeargs="--ramcode 1"
@@ -318,9 +329,11 @@ tlk tos-trusty_t194.img; \
 eks eks.img; \
 bootloader_dtb $dtb_file"
 
+[ -n "${MISC_CONFIG}" ] || MISC_CONFIG=tegra194-mb1-bct-misc-flash.cfg
+
 bctargs="$UPHY_CONFIG $MINRATCHET_CONFIG $TRIM_BPMP_DTB \
          --device_config $DEVICE_CONFIG \
-         --misc_config tegra194-mb1-bct-misc-flash.cfg \
+         --misc_config "$MISC_CONFIG" \
          --misc_cold_boot_config $MISC_COLD_BOOT_CONFIG \
          --pinmux_config $PINMUX_CONFIG \
          --gpioint_config $GPIOINT_CONFIG \
